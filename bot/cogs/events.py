@@ -23,6 +23,19 @@ WELCOMES = [
     "oye <@{id}> aagaya bhai, swagat hai 🎉",
 ]
 
+# Say someone's name in chat -> bot drops a random "fact" about them.
+# Just add more strings to each list. Names with an empty list stay silent
+# until you fill them in. Checked before TRIGGERS above.
+PEOPLE = {
+    "sambhav": [
+        "moti charbi wala chugalkhor",
+    ],
+    "vedant": [],
+    "shreasth": [],
+    "sahil": [],
+    "simar": [],
+}
+
 
 class Events(commands.Cog):
     def __init__(self, bot: commands.Bot):
@@ -37,6 +50,13 @@ class Events(commands.Cog):
     async def on_message(self, message: discord.Message):
         if message.author.bot:
             return
+        # per-person facts (only fire for names that have facts added)
+        content = message.content.lower()
+        for name, facts in PEOPLE.items():
+            if facts and re.search(rf"\b{re.escape(name)}\b", content):
+                await message.reply(random.choice(facts), mention_author=False)
+                return
+        # generic inside-joke triggers
         for pattern, replies in TRIGGERS:
             if pattern.search(message.content):
                 await message.reply(random.choice(replies), mention_author=False)
