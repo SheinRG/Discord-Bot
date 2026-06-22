@@ -4,6 +4,7 @@ import {
   AudioPlayerStatus, VoiceConnectionStatus, entersState,
 } from '@discordjs/voice';
 import play from 'play-dl';
+import ytdl from '@distube/ytdl-core';
 
 // Per-guild queue: { connection, player, queue: [{title,url,requester}] }
 const queues = new Map();
@@ -17,11 +18,18 @@ async function playNext(guildId) {
   }
   const track = q.queue[0];
   try {
-    const stream = await play.stream(track.url);
+    // play-dl's stream extraction breaks whenever YouTube rotates its player,
+    // returning undefined format URLs. @distube/ytdl-core is actively maintained
+    // and handles the signature/format extraction reliably.
+    const stream = ytdl(track.url, {
+      filter: 'audioonly',
+      quality: 'highestaudio',
+      highWaterMark: 1 << 25,
+    });
     // Without this listener, a stream 'error' (e.g. on /stop or YouTube cutting
     // us off) is an unhandled emitter error and crashes the whole process.
-    stream.stream.on('error', err => console.error('stream error:', err));
-    const resource = createAudioResource(stream.stream, { inputType: stream.type });
+    stream.on('error', err => console.error('stream error:', err));
+    const resource = createAudioResource(stream);
     q.player.play(resource);
   } catch (err) {
     console.error('failed to stream', track.url, err);

@@ -8,7 +8,11 @@ export async function execute(interaction, client) {
   } catch (err) {
     console.error(err);
     const msg = { content: '💀 something broke. yell at raghav.', ephemeral: true };
-    if (interaction.deferred || interaction.replied) await interaction.followUp(msg);
-    else await interaction.reply(msg);
+    try {
+      if (interaction.deferred || interaction.replied) await interaction.followUp(msg);
+      else await interaction.reply(msg);
+    } catch (e) {
+      console.error('failed to send error reply:', e);
+    }
   }
 }
