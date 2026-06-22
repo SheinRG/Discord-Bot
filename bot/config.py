@@ -15,12 +15,11 @@ WELCOME_CHANNEL_ID = (
 
 
 def _resolve_ffmpeg() -> str:
-    """Prefer the ffmpeg binary that the old node setup already downloaded
-    (node_modules/ffmpeg-static), otherwise fall back to ffmpeg on PATH
-    (e.g. on a Linux host where you `apt install ffmpeg`)."""
+    """Prefer the local bundled binary (bin/ffmpeg.exe), otherwise fall back to
+    ffmpeg on PATH (e.g. on a Linux host where you `apt install ffmpeg`)."""
     name = "ffmpeg.exe" if os.name == "nt" else "ffmpeg"
-    static = BASE_DIR / "node_modules" / "ffmpeg-static" / name
-    return str(static) if static.exists() else "ffmpeg"
+    local = BASE_DIR / "bin" / name
+    return str(local) if local.exists() else "ffmpeg"
 
 
 FFMPEG_PATH = _resolve_ffmpeg()

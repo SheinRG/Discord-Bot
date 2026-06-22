@@ -2,7 +2,7 @@
 
 Personal Discord bot — slash commands, music, moderation, welcomes, inside-joke triggers. Built with **discord.py** + **yt-dlp**.
 
-> Rewritten from the original discord.js version. yt-dlp is the most reliable YouTube extractor going, which is why music actually works now. The old JS code is still in `src/` (legacy, not used).
+> Rewritten from the original discord.js version. yt-dlp is the most reliable YouTube extractor going, which is why music actually works now.
 
 ## Project structure
 
@@ -10,10 +10,12 @@ Personal Discord bot — slash commands, music, moderation, welcomes, inside-jok
 bot.py                 # entry — loads cogs, syncs slash commands, runs
 config.py              # loads .env + resolves the ffmpeg binary
 requirements.txt
+bin/ffmpeg.exe         # local ffmpeg (gitignored; install per host on deploy)
 cogs/
 ├── fun.py             # 8ball, dice, meme, roast
 ├── mod.py             # ban, kick, clear  (permission-gated)
 ├── music.py           # play, skip, stop  (yt-dlp + ffmpeg)
+├── economy.py         # currency, robbery, traps, leaderboard (SQLite)
 └── events.py          # ready/presence, inside-joke auto-replies, welcomes
 ```
 
@@ -52,14 +54,14 @@ Slash commands are synced **per-guild** on every boot, so they appear instantly 
 
 ### ffmpeg
 
-Music needs an `ffmpeg` binary. On this machine it reuses the one the old node setup already downloaded (`node_modules/ffmpeg-static/ffmpeg.exe`) automatically. If that folder is gone, install ffmpeg and put it on PATH — `config.py` falls back to `ffmpeg` on PATH.
+Music needs an `ffmpeg` binary. Locally it uses `bin/ffmpeg.exe` (gitignored). If that's missing, install ffmpeg and put it on PATH — `config.py` falls back to `ffmpeg` on PATH.
 
 ## 3. Deploy (free hosts)
 
 Push to GitHub, then on **Railway** / **Fly.io** / **Render**:
 - Start command: `python bot.py`
 - Add the 4 env vars
-- **Install ffmpeg on the host** (Railway: add `ffmpeg` via a Nixpacks/apt config; the bundled `node_modules` binary won't exist there).
+- **Install ffmpeg on the host** (Railway: add `ffmpeg` via a Nixpacks/apt config; the local `bin/` binary is gitignored and won't be there).
 
 ## 4. Customize
 
