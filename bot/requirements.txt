@@ -1,0 +1,5 @@
+discord.py[voice]>=2.5
+yt-dlp
+python-dotenv
+audioop-lts; python_version>='3.13'
+aiosqlite

@@ -1,0 +1,26 @@
+"""Central config: loads .env and resolves the ffmpeg binary."""
+import os
+from pathlib import Path
+
+from dotenv import load_dotenv
+
+BASE_DIR = Path(__file__).resolve().parent
+load_dotenv(BASE_DIR / ".env")
+
+DISCORD_TOKEN = os.getenv("DISCORD_TOKEN")
+GUILD_ID = int(os.getenv("GUILD_ID")) if os.getenv("GUILD_ID") else None
+WELCOME_CHANNEL_ID = (
+    int(os.getenv("WELCOME_CHANNEL_ID")) if os.getenv("WELCOME_CHANNEL_ID") else None
+)
+
+
+def _resolve_ffmpeg() -> str:
+    """Prefer the ffmpeg binary that the old node setup already downloaded
+    (node_modules/ffmpeg-static), otherwise fall back to ffmpeg on PATH
+    (e.g. on a Linux host where you `apt install ffmpeg`)."""
+    name = "ffmpeg.exe" if os.name == "nt" else "ffmpeg"
+    static = BASE_DIR / "node_modules" / "ffmpeg-static" / name
+    return str(static) if static.exists() else "ffmpeg"
+
+
+FFMPEG_PATH = _resolve_ffmpeg()

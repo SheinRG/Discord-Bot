@@ -2,3 +2,11 @@ node_modules/
 .env
 *.log
 .DS_Store
+
+# python
+.venv/
+__pycache__/
+*.pyc
+
+# economy database
+economy.db
