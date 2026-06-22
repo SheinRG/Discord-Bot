@@ -30,10 +30,25 @@ PEOPLE = {
     "sambhav": [
         "moti charbi wala chugalkhor",
     ],
-    "vedant": [],
+    "vedant": [
+        "sales god",
+        "the rightfull heir his saplender",
+        "ghar nhi bulata bhadwa",
+        
+    ],
     "shreasth": [],
-    "sahil": [],
-    "simar": [],
+    "sahil": [
+        "kardikhaya bhai , kardikhaya",
+        "tauji, for real",
+        "true amitian",
+        "vini , vedi , vici ",
+
+    ],
+    "simar": [
+        "refund king",
+        "wahe guruji da khalsa , wahe guruji di fateh",
+        
+    ],
 }
 
 
